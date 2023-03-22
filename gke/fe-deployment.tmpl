@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-deployment
+  labels:
+    app: fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe
+  template:
+    metadata:
+      labels:
+        app: fe
+    spec:
+      containers:
+      - name: hc-proxy
+        image: gcr.io/$PROJECT_ID/signurl
+        ports:
+        - containerPort: 8080  
+      serviceAccountName: ksa1
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"               
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-srv-lb
+  labels:
+    type: fe-srv
+  annotations:
+    cloud.google.com/app-protocols: '{"fe":"HTTP2"}'
+spec:
+  type: LoadBalancer  
+  ports:
+  - name: fe
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: fe
