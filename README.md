@@ -49,7 +49,7 @@ Before we get started, note that this tutorial as-is uses a 'Fake OIDC' server o
 
 * [DIY OIDC Server](https://github.com/salrashid123/diy_oidc) adapted for workload federation [here](https://gist.github.com/salrashid123/677866e42cf2785fe885ae9d6130fc21)
 
-The OIDC tokens issued by this server is signed by a static keypair available at a [public endpoint](https://idp-on-cloud-run-6w42z6vi3q-uc.a.run.app/.well-known/openid-configuration).  This means if you configure this tutorial as-is, you'll probably want to unwind/disable the Workload Federation provider.
+The OIDC tokens issued by this server is signed by a static keypair available at a [public endpoint](https://idp-on-cloud-run-3kdezruzua-uc.a.run.app/.well-known/openid-configuration).  This means if you configure this tutorial as-is, you'll *really want to* unwind/disable the Workload Federation provider.
 
 
 ```bash
@@ -64,7 +64,7 @@ gcloud  iam workload-identity-pools create fake-oidc-pool-1 \
 # the issuer specified below is the default deployment described in `diy_oidc` repo:
 gcloud  iam workload-identity-pools providers create-oidc fake-oidc-provider-1 \
         --workload-identity-pool="fake-oidc-pool-1" \
-        --issuer-uri="https://idp-on-cloud-run-6w42z6vi3q-uc.a.run.app" \
+        --issuer-uri="https://idp-on-cloud-run-3kdezruzua-uc.a.run.app" \
         --location="global" \
         --attribute-mapping="google.subject=assertion.sub,attribute.isadmin=assertion.isadmin,attribute.aud=assertion.aud" \
         --attribute-condition="attribute.isadmin=='true'" --project $PROJECT_ID
@@ -76,7 +76,7 @@ echo $SA_EMAIL
 git clone https://github.com/salrashid123/diy_oidc.git
 cd diy_oidc
 
-export URL="https://idp-on-cloud-run-6w42z6vi3q-uc.a.run.app"
+export URL="https://idp-on-cloud-run-3kdezruzua-uc.a.run.app"
 export IAT=`date -u +%s`
 export EXP=`date -u +%s -d "+3600 seconds"`
 export EMAIL="alice@domain.com"
